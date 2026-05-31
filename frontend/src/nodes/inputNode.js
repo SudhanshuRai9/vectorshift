@@ -31,30 +31,21 @@ export const InputNode = ({ id, data }) => {
         },
       ]}
     >
-      <label
-        style={{ display: "flex", flexDirection: "column", fontSize: "12px" }}
-      >
-        Name:
+      <label className="vs-field">
+        <span className="vs-field__label">Name</span>
         <input
+          className="vs-input"
           type="text"
           value={currName}
           onChange={handleNameChange}
-          style={{ marginTop: "5px" }}
         />
       </label>
-      <label
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          fontSize: "12px",
-          marginTop: "5px",
-        }}
-      >
-        Type:
+      <label className="vs-field">
+        <span className="vs-field__label">Type</span>
         <select
+          className="vs-select"
           value={inputType}
           onChange={handleTypeChange}
-          style={{ marginTop: "5px" }}
         >
           <option value="Text">Text</option>
           <option value="File">File</option>

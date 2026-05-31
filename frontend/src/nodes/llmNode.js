@@ -29,7 +29,7 @@ export const LLMNode = ({ id, data }) => {
         },
       ]}
     >
-      <span style={{ fontSize: 12, color: "#444" }}>This is a LLM.</span>
+      <div className="vs-help">This is a LLM.</div>
     </BaseNode>
   );
 };
