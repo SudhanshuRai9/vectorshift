@@ -5,9 +5,210 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #0b1220;
+  color: #e7eefc;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+:root {
+  --vs-panel: #0f1a2b;
+  --vs-panel-2: #101f36;
+  --vs-border: rgba(255, 255, 255, 0.12);
+  --vs-border-strong: rgba(255, 255, 255, 0.18);
+  --vs-text: #e7eefc;
+  --vs-text-dim: rgba(231, 238, 252, 0.72);
+  --vs-accent: #6ee7ff;
+}
+
+.vs-toolbar {
+  padding: 12px 12px 0 12px;
+}
+
+.vs-toolbar__grid {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.vs-draggable {
+  cursor: grab;
+  min-width: 92px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: linear-gradient(180deg, var(--vs-panel) 0%, #0b1526 100%);
+  border: 1px solid var(--vs-border);
+  user-select: none;
+}
+
+.vs-draggable:active {
+  cursor: grabbing;
+}
+
+.vs-draggable__label {
+  color: var(--vs-text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.vs-node {
+  width: 220px;
+  min-height: 90px;
+  border: 1px solid var(--vs-border-strong);
+  border-radius: 14px;
+  background: linear-gradient(180deg, var(--vs-panel-2) 0%, #0c1526 100%);
+  color: var(--vs-text);
+  padding: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.vs-node__header {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  font-size: 13px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--vs-border);
+  margin-bottom: 10px;
+}
+
+.vs-node__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.vs-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.vs-field__label {
+  color: var(--vs-text-dim);
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.vs-input,
+.vs-select,
+.vs-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: 1px solid var(--vs-border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--vs-text);
+  padding: 8px 10px;
+  outline: none;
+}
+
+.vs-input:focus,
+.vs-select:focus,
+.vs-textarea:focus {
+  border-color: rgba(110, 231, 255, 0.55);
+  box-shadow: 0 0 0 3px rgba(110, 231, 255, 0.15);
+}
+
+.vs-textarea {
+  resize: none;
+  line-height: 1.3;
+}
+
+.vs-help {
+  color: var(--vs-text-dim);
+  line-height: 1.35;
+}
+
+.react-flow__controls {
+  box-shadow: none !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+.react-flow__controls button {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid var(--vs-border) !important;
+  color: var(--vs-text) !important;
+}
+
+.react-flow__controls button:hover {
+  background: rgba(110, 231, 255, 0.14) !important;
+  border-color: rgba(110, 231, 255, 0.35) !important;
+}
+
+.react-flow__controls button svg {
+  fill: var(--vs-text) !important;
+}
+
+.react-flow__controls button path {
+  fill: var(--vs-text) !important;
+}
+
+.react-flow__controls-delete:disabled {
+  opacity: 0.45;
+}
+
+.react-flow__controls-delete svg {
+  display: block;
+}
+
+.react-flow__minimap {
+  background: var(--vs-panel) !important;
+  border: 1px solid var(--vs-border) !important;
+}
+
+.react-flow__background {
+  background: #0b1220 !important;
+}
+
+.vs-handle {
+  width: 10px;
+  height: 10px;
+  border: 2px solid rgba(110, 231, 255, 0.9);
+  background: #0b1220;
+}
+
+.vs-submitbar {
+  display: flex;
+  justify-content: center;
+  padding: 14px 12px 18px 12px;
+}
+
+.vs-button {
+  border: 1px solid rgba(110, 231, 255, 0.35);
+  background: linear-gradient(180deg, rgba(110, 231, 255, 0.22) 0%, rgba(110, 231, 255, 0.12) 100%);
+  color: var(--vs-text);
+  font-weight: 700;
+  border-radius: 12px;
+  padding: 10px 18px;
+  cursor: pointer;
+}
+
+.vs-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.vs-button--sm {
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+.vs-button:hover {
+  border-color: rgba(110, 231, 255, 0.55);
+  background: linear-gradient(180deg, rgba(110, 231, 255, 0.3) 0%, rgba(110, 231, 255, 0.16) 100%);
+}
+
+.vs-button:active {
+  transform: translateY(1px);
 }

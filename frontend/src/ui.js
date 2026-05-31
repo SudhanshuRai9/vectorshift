@@ -2,14 +2,19 @@
 // Displays the drag-and-drop UI
 // --------------------------------------------------
 
-import { useState, useRef, useCallback } from 'react';
-import ReactFlow, { Controls, Background, MiniMap } from 'reactflow';
+import { useCallback, useMemo, useRef, useState } from "react";
+import ReactFlow, { Background, ControlButton, Controls, MiniMap } from "reactflow";
 import { useStore } from './store';
 import { shallow } from 'zustand/shallow';
 import { InputNode } from './nodes/inputNode';
 import { LLMNode } from './nodes/llmNode';
 import { OutputNode } from './nodes/outputNode';
 import { TextNode } from './nodes/textNode';
+import { MergeNode } from "./nodes/mergeNode";
+import { TransformNode } from "./nodes/transformNode";
+import { DelayNode } from "./nodes/delayNode";
+import { ConditionNode } from "./nodes/conditionNode";
+import { TemplateNode } from "./nodes/templateNode";
 
 import 'reactflow/dist/style.css';
 
@@ -20,6 +25,11 @@ const nodeTypes = {
   llm: LLMNode,
   customOutput: OutputNode,
   text: TextNode,
+  merge: MergeNode,
+  transform: TransformNode,
+  delay: DelayNode,
+  condition: ConditionNode,
+  template: TemplateNode,
 };
 
 const selector = (state) => ({
@@ -30,6 +40,9 @@ const selector = (state) => ({
   onNodesChange: state.onNodesChange,
   onEdgesChange: state.onEdgesChange,
   onConnect: state.onConnect,
+  onEdgeUpdate: state.onEdgeUpdate,
+  lastSelected: state.lastSelected,
+  deleteLatestSelected: state.deleteLatestSelected,
 });
 
 export const PipelineUI = () => {
@@ -42,8 +55,19 @@ export const PipelineUI = () => {
       addNode,
       onNodesChange,
       onEdgesChange,
-      onConnect
+      onConnect,
+      onEdgeUpdate,
+      lastSelected,
+      deleteLatestSelected,
     } = useStore(selector, shallow);
+
+    const canDeleteLatest = useMemo(() => {
+      if (!lastSelected) return false;
+      if (lastSelected.type === "node") {
+        return nodes.some((n) => n.id === lastSelected.id && n.selected);
+      }
+      return edges.some((e) => e.id === lastSelected.id && e.selected);
+    }, [edges, lastSelected, nodes]);
 
     const getInitNodeData = (nodeID, type) => {
       let nodeData = { id: nodeID, nodeType: `${type}` };
@@ -80,7 +104,7 @@ export const PipelineUI = () => {
             addNode(newNode);
           }
         },
-        [reactFlowInstance]
+        [reactFlowInstance, addNode, getNodeID]
     );
 
     const onDragOver = useCallback((event) => {
@@ -90,24 +114,41 @@ export const PipelineUI = () => {
 
     return (
         <>
-        <div ref={reactFlowWrapper} style={{width: '100wv', height: '70vh'}}>
+        <div ref={reactFlowWrapper} style={{width: '100vw', height: '70vh'}}>
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
+                onEdgeUpdate={onEdgeUpdate}
                 onDrop={onDrop}
                 onDragOver={onDragOver}
                 onInit={setReactFlowInstance}
                 nodeTypes={nodeTypes}
                 proOptions={proOptions}
+                edgesUpdatable
                 snapGrid={[gridSize, gridSize]}
                 connectionLineType='smoothstep'
             >
                 <Background color="#aaa" gap={gridSize} />
-                <Controls />
-                <MiniMap />
+                <Controls position="top-right" showInteractive>
+                  <ControlButton
+                    onClick={deleteLatestSelected}
+                    disabled={!canDeleteLatest}
+                    title="Delete selected"
+                    aria-label="delete selected"
+                    className="react-flow__controls-delete"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        d="M9 3h6l1 2h5v2H3V5h5l1-2zm1 6h2v10h-2V9zm4 0h2v10h-2V9zM7 9h2v10H7V9z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </ControlButton>
+                </Controls>
+                <MiniMap position="bottom-right" />
             </ReactFlow>
         </div>
         </>
